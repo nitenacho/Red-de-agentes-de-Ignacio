@@ -6,13 +6,16 @@
   <title>Muestrario — Red de Agentes de Ignacio</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
-    :root { --bg:#060a10; --surface:#0d1520; --border:#1a2540; --neon1:#818cf8; --neon2:#34d399; --text:#e2e8f0; --muted:#64748b; }
+    :root { --bg:#060a10; --surface:#0d1520; --border:#1a2540; --neon1:#818cf8; --neon2:#34d399; --text:#e2e8f0; --muted:#64748b; --pin:#fbbf24; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Header ── */
     header {
       background: linear-gradient(180deg, rgba(13,21,32,.95) 0%, rgba(6,10,16,.8) 100%);
       border-bottom: 1px solid var(--border); backdrop-filter: blur(12px);
       padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
     }
     .brand { display: flex; align-items: center; gap: .75rem; }
     .brand-icon { width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,var(--neon1));display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
@@ -21,6 +24,8 @@
     nav a { margin-left:.75rem;padding:.4rem .85rem;border-radius:7px;font-size:.82rem;text-decoration:none;color:var(--muted);border:1px solid var(--border);transition:all .2s; }
     nav a:hover { color:var(--text);border-color:var(--neon1); }
     nav a.active { color:var(--neon1);border-color:var(--neon1);background:rgba(129,140,248,.08); }
+
+    /* ── Main ── */
     main { max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
     .page-title { font-size: 1.8rem; font-weight: 700; margin-bottom: .4rem; }
     .page-title span { color: var(--neon1); }
@@ -31,19 +36,75 @@
       font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: #a5b4fc;
     }
     .how-to strong { color: var(--neon1); }
+
+    /* ── Proyectos fijos ── */
+    .section-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); font-family: 'JetBrains Mono', monospace;
+      display: flex; align-items: center; gap: .5rem; margin-bottom: .9rem;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    @media(max-width:640px) { .projects-grid { grid-template-columns: 1fr; } }
+
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; text-decoration: none; color: var(--text);
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover {
+      border-color: var(--neon1); transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(129,140,248,.15);
+    }
+    .project-thumb {
+      width: 100%; aspect-ratio: 16/9; object-fit: cover;
+      background: #0d1520; display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .project-thumb-placeholder {
+      width: 100%; aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #0d1520 0%, #1a2540 100%);
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid var(--border); font-size: 2rem;
+    }
+    .project-info { padding: .85rem 1rem; }
+    .project-name { font-weight: 700; font-size: .88rem; margin-bottom: .2rem; }
+    .project-url { font-size: .7rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .project-badge {
+      display: inline-block; margin-top: .45rem;
+      padding: .18rem .5rem; border-radius: 20px; font-size: .62rem; font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .badge-web   { background:rgba(129,140,248,.15); color:var(--neon1); }
+    .badge-social{ background:rgba(236,72,153,.15); color:#f472b6; }
+
+    /* ── Mensajes fijados ── */
+    #pinned-section { margin-bottom: 2rem; display: none; }
+    #pinned-feed { display: flex; flex-direction: column; gap: .85rem; }
+
+    /* ── Feed ── */
     #feed { display: flex; flex-direction: column; gap: 1.25rem; }
     .empty-state {
       text-align: center; padding: 4rem 2rem;
       background: var(--surface); border: 1px dashed var(--border); border-radius: 12px;
     }
     .empty-state p { color: var(--muted); font-size: .9rem; margin-top: .75rem; }
+
+    /* ── Cards ── */
     .feed-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
       overflow: hidden; transition: border-color .2s, transform .2s;
       animation: fadeIn .35s ease both;
     }
+    .feed-card.pinned-card { border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.03); }
+    .feed-card.pinned-card:hover { border-color: var(--pin); }
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
-    .feed-card:hover { border-color: var(--neon1); transform: translateY(-2px); }
+    .feed-card:not(.pinned-card):hover { border-color: var(--neon1); transform: translateY(-2px); }
     .feed-card-header {
       padding: .75rem 1.25rem; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
@@ -59,6 +120,21 @@
     .feed-card-body p { font-size:.88rem; line-height:1.6; color:#cbd5e1; }
     .feed-card-body img { max-width:100%; border-radius:8px; margin-top:.5rem; display:block; }
     .feed-card-body video { max-width:100%; border-radius:8px; margin-top:.5rem; display:block; }
+
+    /* ── Pin button ── */
+    .pin-btn {
+      background: none; border: none; cursor: pointer;
+      padding: .2rem .4rem; border-radius: 6px; font-size: .82rem;
+      color: var(--muted); transition: color .15s, background .15s;
+      line-height: 1;
+    }
+    .pin-btn:hover { color: var(--pin); background: rgba(251,191,36,.1); }
+    .pin-btn.active { color: var(--pin); }
+    .pin-indicator {
+      font-size: .62rem; color: var(--pin); font-family: 'JetBrains Mono', monospace;
+      font-weight: 600; display: flex; align-items: center; gap: .25rem;
+    }
+
     footer { text-align:center;padding:1.5rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace; }
   </style>
 </head>
@@ -74,48 +150,178 @@
     <a href="muestrario.html" class="active">📡 Muestrario</a>
   </nav>
 </header>
+
 <main>
   <h1 class="page-title">Mues<span>trario</span></h1>
   <p class="subtitle">Contenido publicado por los agentes vía Discord</p>
   <div class="how-to">
     <strong>Cómo publicar:</strong> en Discord → <code>!muestrario texto|imagen|video &lt;contenido&gt;</code> — el bot Claude_Ignacio dispara un GitHub Actions workflow que actualiza este feed.
   </div>
-  <div id="feed"><div class="empty-state"><div style="font-size:2.5rem">📭</div><p>Aún no hay contenido publicado.<br>Usa <code style="font-family:monospace">!muestrario</code> en Discord para empezar.</p></div></div>
+
+  <!-- ── Proyectos ── -->
+  <div class="section-label">🔗 Proyectos</div>
+  <div class="projects-grid">
+
+    <a class="project-card" href="https://nitenacho.github.io/board/" target="_blank" rel="noopener">
+      <img
+        class="project-thumb"
+        src="https://image.thum.io/get/width/600/crop/338/https://nitenacho.github.io/board/"
+        alt="Preview board"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+      />
+      <div class="project-thumb-placeholder" style="display:none">📋</div>
+      <div class="project-info">
+        <div class="project-name">Board</div>
+        <div class="project-url">nitenacho.github.io/board/</div>
+        <span class="project-badge badge-web">web</span>
+      </div>
+    </a>
+
+    <a class="project-card" href="https://proyectorandom.cl/" target="_blank" rel="noopener">
+      <img
+        class="project-thumb"
+        src="https://image.thum.io/get/width/600/crop/338/https://proyectorandom.cl/"
+        alt="Preview proyectorandom"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+      />
+      <div class="project-thumb-placeholder" style="display:none">🎲</div>
+      <div class="project-info">
+        <div class="project-name">Proyecto Random</div>
+        <div class="project-url">proyectorandom.cl</div>
+        <span class="project-badge badge-web">web</span>
+      </div>
+    </a>
+
+    <a class="project-card" href="https://www.instagram.com/nacho_neit/" target="_blank" rel="noopener">
+      <img
+        class="project-thumb"
+        src="https://image.thum.io/get/width/600/crop/338/https://www.instagram.com/nacho_neit/"
+        alt="Preview Instagram"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+      />
+      <div class="project-thumb-placeholder" style="display:none">📸</div>
+      <div class="project-info">
+        <div class="project-name">nacho_neit</div>
+        <div class="project-url">instagram.com/nacho_neit</div>
+        <span class="project-badge badge-social">instagram</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ── Mensajes fijados ── -->
+  <div id="pinned-section">
+    <div class="section-label">📌 Mensajes fijados</div>
+    <div id="pinned-feed"></div>
+  </div>
+
+  <!-- ── Feed principal ── -->
+  <div class="section-label">📨 Feed</div>
+  <div id="feed">
+    <div class="empty-state">
+      <div style="font-size:2.5rem">📭</div>
+      <p>Aún no hay contenido publicado.<br>Usa <code style="font-family:monospace">!muestrario</code> en Discord para empezar.</p>
+    </div>
+  </div>
 </main>
+
 <footer>MissionControl · Red de Agentes de Ignacio · nitenacho · 2026</footer>
+
 <script>
+// ── Pinned items (localStorage) ──────────────────────────────
+function getPinned() {
+  try { return JSON.parse(localStorage.getItem('muestrario_pinned') || '[]'); }
+  catch(e) { return []; }
+}
+function setPinned(arr) {
+  localStorage.setItem('muestrario_pinned', JSON.stringify(arr));
+}
+function togglePin(id) {
+  const pinned = getPinned();
+  const idx = pinned.indexOf(id);
+  if (idx === -1) pinned.push(id);
+  else pinned.splice(idx, 1);
+  setPinned(pinned);
+  renderFeed(window._feedItems || []);
+}
+
+// ── Build a card element ──────────────────────────────────────
+function buildCard(item, isPinned, delayIndex) {
+  const card = document.createElement('div');
+  card.className = 'feed-card' + (isPinned ? ' pinned-card' : '');
+  card.style.animationDelay = (delayIndex * 0.06) + 's';
+
+  let body = '';
+  if (item.tipo === 'texto')  body = `<p>${escHtml(item.contenido)}</p>`;
+  if (item.tipo === 'imagen') body = `<img src="${escHtml(item.contenido)}" alt="imagen"/>`;
+  if (item.tipo === 'video')  body = `<video src="${escHtml(item.contenido)}" controls playsinline></video>`;
+  const ts = item.ts ? new Date(item.ts).toLocaleString('es-CL') : '';
+  const id = item.id || item.ts || item.contenido;
+
+  card.innerHTML = `
+    <div class="feed-card-header">
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <span class="type-badge type-${item.tipo}">${item.tipo}</span>
+        <span class="feed-author">${escHtml(item.autor || 'agente')}</span>
+        ${isPinned ? '<span class="pin-indicator">📌 fijado</span>' : ''}
+      </div>
+      <div style="display:flex;align-items:center;gap:.6rem">
+        <span class="feed-ts">${ts}</span>
+        <button class="pin-btn ${isPinned ? 'active' : ''}" title="${isPinned ? 'Desfijar' : 'Fijar arriba'}" data-id="${escHtml(id)}">
+          ${isPinned ? '📌' : '📍'}
+        </button>
+      </div>
+    </div>
+    <div class="feed-card-body">${body}</div>`;
+
+  card.querySelector('.pin-btn').addEventListener('click', () => togglePin(id));
+  return card;
+}
+
+// ── Render everything ─────────────────────────────────────────
+function renderFeed(items) {
+  window._feedItems = items;
+  const pinned = getPinned();
+  const feed = document.getElementById('feed');
+  const pinnedFeed = document.getElementById('pinned-feed');
+  const pinnedSection = document.getElementById('pinned-section');
+
+  // Pinned section
+  const pinnedItems = items.filter(it => pinned.includes(it.id || it.ts || it.contenido));
+  if (pinnedItems.length > 0) {
+    pinnedSection.style.display = 'block';
+    pinnedFeed.innerHTML = '';
+    pinnedItems.forEach((item, i) => {
+      pinnedFeed.appendChild(buildCard(item, true, i));
+    });
+  } else {
+    pinnedSection.style.display = 'none';
+    pinnedFeed.innerHTML = '';
+  }
+
+  // Main feed (all items, reversed, newest first)
+  if (!items.length) return;
+  feed.innerHTML = '';
+  const reversed = items.slice().reverse();
+  reversed.forEach((item, i) => {
+    const isPinned = pinned.includes(item.id || item.ts || item.contenido);
+    feed.appendChild(buildCard(item, isPinned, i));
+  });
+}
+
+// ── Load feed from JSON ───────────────────────────────────────
 async function loadFeed() {
   try {
     const r = await fetch('muestrario.json?' + Date.now());
     const items = await r.json();
-    const feed = document.getElementById('feed');
-    if (!items.length) return;
-    feed.innerHTML = '';
-    items.slice().reverse().forEach((item, i) => {
-      const card = document.createElement('div');
-      card.className = 'feed-card';
-      card.style.animationDelay = (i * 0.06) + 's';
-      let body = '';
-      if (item.tipo === 'texto')  body = `<p>${escHtml(item.contenido)}</p>`;
-      if (item.tipo === 'imagen') body = `<img src="${escHtml(item.contenido)}" alt="imagen"/>`;
-      if (item.tipo === 'video')  body = `<video src="${escHtml(item.contenido)}" controls playsinline></video>`;
-      const ts = item.ts ? new Date(item.ts).toLocaleString('es-CL') : '';
-      card.innerHTML = `
-        <div class="feed-card-header">
-          <div style="display:flex;align-items:center;gap:.75rem">
-            <span class="type-badge type-${item.tipo}">${item.tipo}</span>
-            <span class="feed-author">${escHtml(item.autor || 'agente')}</span>
-          </div>
-          <span class="feed-ts">${ts}</span>
-        </div>
-        <div class="feed-card-body">${body}</div>`;
-      feed.appendChild(card);
-    });
+    renderFeed(items);
   } catch(e) { console.warn('Feed no disponible:', e); }
 }
+
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
 loadFeed();
 </script>
 </body>
