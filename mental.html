@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diseño Mental — Red de Agentes de Ignacio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+    :root { --bg:#060a10; --surface:#0d1520; --border:#1a2540; --neon1:#818cf8; --neon2:#34d399; --text:#e2e8f0; --muted:#64748b; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    header {
+      background: linear-gradient(180deg, rgba(13,21,32,.95) 0%, rgba(6,10,16,.8) 100%);
+      border-bottom: 1px solid var(--border); backdrop-filter: blur(12px);
+      padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: .75rem; }
+    .brand-icon { width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,var(--neon1));display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
+    .brand-text h1 { font-size: 1.1rem; font-weight: 700; }
+    .brand-text h1 span { color: var(--neon1); }
+    nav a { margin-left: .75rem; padding:.4rem .85rem;border-radius:7px;font-size:.82rem;text-decoration:none;color:var(--muted);border:1px solid var(--border);transition:all .2s; }
+    nav a:hover { color:var(--text);border-color:var(--neon1); }
+    nav a.active { color:var(--neon1);border-color:var(--neon1);background:rgba(129,140,248,.08); }
+    main { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+    .page-title { font-size: 2rem; font-weight: 700; margin-bottom: .5rem; }
+    .page-title span { color: var(--neon1); }
+    .subtitle { color: var(--muted); margin-bottom: 3rem; font-size: .9rem; }
+    .step { display: flex; gap: 1.5rem; margin-bottom: 2.5rem; }
+    .step-num {
+      width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--neon1), #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1rem;
+    }
+    .step-content h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .step-content p { font-size: .88rem; color: #94a3b8; line-height: 1.65; }
+    .step-content code { font-family: 'JetBrains Mono', monospace; font-size: .8rem; background: rgba(129,140,248,.1); color: var(--neon1); padding: .1rem .35rem; border-radius: 4px; }
+    .step-icon { font-size: 1.4rem; margin-bottom: .4rem; display: block; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: .5rem 0 2.5rem; }
+    .diagram-section { margin-top: 3rem; }
+    .diagram-section h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .diagram-placeholder {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 3rem; text-align: center; color: var(--muted); font-size: .85rem;
+    }
+    .diagram-placeholder img { max-width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
+    footer { text-align:center;padding:1.5rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-icon">🧠</div>
+    <div class="brand-text"><h1>Diseño <span>Mental</span></h1></div>
+  </div>
+  <nav>
+    <a href="index.html">⬡ Control</a>
+    <a href="mental.html" class="active">🧠 Mental</a>
+    <a href="muestrario.html">📡 Muestrario</a>
+  </nav>
+</header>
+<main>
+  <h1 class="page-title">Diseño <span>Mental</span></h1>
+  <p class="subtitle">Cómo se construyó la Red de Agentes de Ignacio — paso a paso</p>
+
+  <div class="step">
+    <div class="step-num">01</div>
+    <div class="step-content">
+      <span class="step-icon">🤖</span>
+      <h2>ChatGPT Desktop + identidad GPT_Ignacio</h2>
+      <p>Se instaló ChatGPT Desktop (v1.2026.119) y se configuró el proyecto "Red de Agentes de Ignacio". Se definieron instrucciones de sistema para que GPT-4o asuma el rol de <code>GPT_Ignacio</code>. El saludo de activación fue enviado desde Claude_Ignacio: <em>"GPT_Ignacio listo"</em>.</p>
+    </div>
+  </div>
+  <hr class="divider"/>
+
+  <div class="step">
+    <div class="step-num">02</div>
+    <div class="step-content">
+      <span class="step-icon">💬</span>
+      <h2>Bots de Discord</h2>
+      <p>Se registraron 3 Discord Applications: <code>Claude_Ignacio</code>, <code>GPT_Ignacio</code> y <code>ClawFrankie</code>. Se habilitaron los intents Message Content, Server Members y Presence. Los bots fueron invitados al servidor "El servidor de Ignacio Concha". Existen dos implementaciones: Python (<code>/bots/</code>) y Node.js (<code>/discord-bot/</code>) con soporte para <code>!ping</code> y <code>!muestrario</code>.</p>
+    </div>
+  </div>
+  <hr class="divider"/>
+
+  <div class="step">
+    <div class="step-num">03</div>
+    <div class="step-content">
+      <span class="step-icon">⚙️</span>
+      <h2>Repositorio GitHub + GitHub Pages</h2>
+      <p>Repositorio creado en <code>nitenacho/Red-de-agentes-de-Ignacio</code>. GitHub Pages activado en la rama <code>main</code>. La web se publica automáticamente en cada push. Estructura: <code>index.html</code> (MissionControl), <code>mental.html</code>, <code>muestrario.html</code>, <code>muestrario.json</code>, <code>assets/</code>, <code>docs/</code>.</p>
+    </div>
+  </div>
+  <hr class="divider"/>
+
+  <div class="step">
+    <div class="step-num">04</div>
+    <div class="step-content">
+      <span class="step-icon">🌐</span>
+      <h2>Web MissionControl</h2>
+      <p>La página principal es un dashboard dark con acentos neón que muestra las tarjetas de los 3 agentes con estado, un feed de actividad en tiempo real y links de navegación. Diseñada para reflejar el estado actual de la red.</p>
+    </div>
+  </div>
+  <hr class="divider"/>
+
+  <div class="step">
+    <div class="step-num">05</div>
+    <div class="step-content">
+      <span class="step-icon">📡</span>
+      <h2>Muestrario — integración Discord ↔ Web</h2>
+      <p>El bot <code>!muestrario tipo contenido</code> en Discord dispara un <code>repository_dispatch</code> a GitHub Actions con el tipo (<code>texto</code>, <code>imagen</code>, <code>video</code>) y el contenido. El workflow <code>.github/workflows/muestrario.yml</code> edita <code>muestrario.json</code> y hace push. La página <code>muestrario.html</code> lee el JSON y renderiza el feed cronológicamente.</p>
+    </div>
+  </div>
+  <hr class="divider"/>
+
+  <div class="step">
+    <div class="step-num">06</div>
+    <div class="step-content">
+      <span class="step-icon">🔗</span>
+      <h2>Arquitectura inter-agente</h2>
+      <p>Los 3 agentes coexisten en el mismo servidor Discord. <code>Claude_Ignacio</code> es el orquestador — puede mencionar a <code>GPT_Ignacio</code> y <code>ClawFrankie</code> para delegar tareas. <code>ClawFrankie</code> actúa como bridge y árbitro. La web es el punto de convergencia donde todo el contenido generado se publica.</p>
+    </div>
+  </div>
+
+  <div class="diagram-section">
+    <h2>Diagrama de arquitectura</h2>
+    <div class="diagram-placeholder">
+      <img src="assets/diagrama-mental.png" alt="Diagrama de arquitectura — Red de Agentes de Ignacio" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <p style="display:none">Diagrama próximamente — generado por GPT_Ignacio</p>
+    </div>
+  </div>
+</main>
+<footer>MissionControl · Red de Agentes de Ignacio · nitenacho · 2026</footer>
+</body>
+</html>

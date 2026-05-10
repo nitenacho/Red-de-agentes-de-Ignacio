@@ -1,0 +1,54 @@
+name: Actualizar Muestrario
+
+on:
+  repository_dispatch:
+    types: [muestrario]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Agregar entrada al muestrario
+        run: |
+          python3 - <<'PYEOF'
+          import json, os, sys
+
+          payload = {
+              "tipo":     os.environ.get("TIPO", "texto"),
+              "contenido": os.environ.get("CONTENIDO", ""),
+              "autor":    os.environ.get("AUTOR", "agente"),
+              "ts":       int(os.environ.get("TS", "0"))
+          }
+
+          with open("muestrario.json", "r") as f:
+              data = json.load(f)
+
+          data.append(payload)
+
+          # Mantener solo los últimos 100 registros
+          data = data[-100:]
+
+          with open("muestrario.json", "w") as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+
+          print(f"Entrada agregada: {payload['tipo']} — {payload['contenido'][:60]}")
+          PYEOF
+        env:
+          TIPO:      ${{ github.event.client_payload.tipo }}
+          CONTENIDO: ${{ github.event.client_payload.contenido }}
+          AUTOR:     ${{ github.event.client_payload.autor }}
+          TS:        ${{ github.event.client_payload.ts }}
+
+      - name: Commit y push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add muestrario.json
+          git diff --cached --quiet || git commit -m "muestrario: nueva entrada [${{ github.event.client_payload.tipo }}] por ${{ github.event.client_payload.autor }}"
+          git push
