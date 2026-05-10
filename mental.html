@@ -44,6 +44,41 @@
       padding: 3rem; text-align: center; color: var(--muted); font-size: .85rem;
     }
     .diagram-placeholder img { max-width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
+
+    /* ── Prompt section ── */
+    .prompt-section { margin-top: 4rem; border-top: 1px solid var(--border); padding-top: 3rem; }
+    .prompt-section h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; }
+    .prompt-section h2 span { color: var(--neon1); }
+    .prompt-section .prompt-desc { font-size: .88rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+    .prompt-section .prompt-desc strong { color: var(--text); }
+    .prompt-wrapper { position: relative; }
+    .prompt-box {
+      background: #070d16; border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.75rem 1.75rem 1.75rem 1.75rem;
+      font-family: 'JetBrains Mono', monospace; font-size: .78rem; line-height: 1.7;
+      color: #94a3b8; white-space: pre-wrap; word-break: break-word;
+      max-height: 520px; overflow-y: auto;
+    }
+    .prompt-box .ph { color: var(--neon1); font-weight: 600; }
+    .copy-btn {
+      position: absolute; top: .75rem; right: .75rem;
+      background: rgba(129,140,248,.12); border: 1px solid rgba(129,140,248,.3);
+      color: var(--neon1); border-radius: 7px; padding: .35rem .85rem;
+      font-size: .75rem; font-family: 'JetBrains Mono', monospace; cursor: pointer;
+      transition: all .2s;
+    }
+    .copy-btn:hover { background: rgba(129,140,248,.22); }
+    .copy-btn.copied { color: var(--neon2); border-color: rgba(52,211,153,.4); }
+    .prereq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .prereq-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1rem 1.2rem;
+    }
+    .prereq-card h3 { font-size: .82rem; font-weight: 700; color: var(--neon1); margin-bottom: .5rem; }
+    .prereq-card ul { list-style: none; padding: 0; }
+    .prereq-card ul li { font-size: .8rem; color: var(--muted); padding: .18rem 0; }
+    .prereq-card ul li::before { content: "▸ "; color: var(--neon1); }
+
     footer { text-align:center;padding:1.5rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace; }
   </style>
 </head>
@@ -129,6 +164,179 @@
       <p style="display:none">Diagrama próximamente — generado por GPT_Ignacio</p>
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PROMPT MAESTRO — Replicar este proyecto desde cero
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="prompt-section">
+    <h2>Prompt para <span>replicar este proyecto</span></h2>
+    <p class="prompt-desc">
+      Copia el bloque de abajo y pégalo en <strong>Claude Code</strong> (claude.ai/code o la CLI)
+      reemplazando los valores entre <strong style="color:var(--neon1)">[CORCHETES]</strong> con tus propios datos.
+      Claude ejecutará todo el proyecto de forma autónoma usando el computador.
+    </p>
+
+    <div class="prereq-grid">
+      <div class="prereq-card">
+        <h3>Cuentas necesarias</h3>
+        <ul>
+          <li>GitHub (usuario + repo público)</li>
+          <li>Discord (cuenta + servidor propio)</li>
+          <li>ChatGPT Plus (para GPT-4o)</li>
+          <li>Anthropic API key</li>
+        </ul>
+      </div>
+      <div class="prereq-card">
+        <h3>Herramientas a instalar</h3>
+        <ul>
+          <li>Node.js 18+ y npm</li>
+          <li>Python 3.10+</li>
+          <li>Git + gh CLI</li>
+          <li>Claude Code (claude.ai/code)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="prompt-wrapper">
+      <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">Copiar</button>
+      <pre class="prompt-box" id="promptText">Eres Claude Sonnet ejecutando el proyecto "Red de Agentes" desde cero en mi computador.
+Usa el computador, la terminal y el navegador de forma autónoma para completar todas las fases.
+Antes de empezar, confirma que entendiste el plan completo respondiendo "Entendido — iniciando Red de Agentes".
+
+═══════════════════════════════════════════
+DATOS DE TU PROYECTO (reemplaza estos valores)
+═══════════════════════════════════════════
+NOMBRE_PROYECTO    = [RedDeAgentes-TuNombre]          ← nombre del repo GitHub
+GITHUB_USER        = [tu-usuario-github]
+AGENTE_PRINCIPAL   = [Claude_TuNombre]                ← bot Discord con Claude Sonnet 4.5+
+AGENTE_GPT         = [GPT_TuNombre]                   ← bot Discord con GPT-4o
+AGENTE_PUENTE      = [NombreTercerBot]                ← bot Discord auxiliar
+DISCORD_SERVER     = [URL-de-tu-servidor-discord]
+ANTHROPIC_KEY      = [sk-ant-...]                     ← de console.anthropic.com
+OPENAI_KEY         = [sk-...]                         ← de platform.openai.com
+
+═══════════════════════════════════════════
+FASES DEL PROYECTO (ejecutar en orden)
+═══════════════════════════════════════════
+
+FASE 0 — Verificar herramientas
+  Comprueba que están instalados: git, gh, node, npm, python.
+  Si falta alguno, instálalo. Verifica con: git --version, node --version, python --version.
+
+FASE 1 — ChatGPT Desktop + identidad del agente GPT
+  Abre ChatGPT Desktop (o chatgpt.com). Crea un Proyecto llamado NOMBRE_PROYECTO.
+  Dentro del proyecto, escribe estas instrucciones de sistema:
+    "Eres AGENTE_GPT, agente IA del proyecto NOMBRE_PROYECTO. Tu rol es ejecutar
+     tareas que te encomiende AGENTE_PRINCIPAL. Cuando recibas el saludo de activación,
+     responde exactamente: AGENTE_GPT listo"
+  Luego envía el mensaje de activación desde Claude:
+    "Hola, soy AGENTE_PRINCIPAL. A partir de ahora eres AGENTE_GPT. Confirma respondiendo AGENTE_GPT listo."
+  Captura screenshot de la respuesta y guárdala en assets/saludo-gpt.png.
+
+FASE 2 — Crear 3 Discord Applications y sus bots
+  En discord.com/developers/applications, crea 3 aplicaciones:
+    1. AGENTE_PRINCIPAL  2. AGENTE_GPT  3. AGENTE_PUENTE
+  Para cada una: Bot → Enable → Reset Token → copia el token.
+  Habilita intents: Message Content, Server Members, Presence.
+  Crea la OAuth2 URL con scope bot + permissions 274877908992 e invita cada bot al servidor.
+
+FASE 3 — Crear repo GitHub + activar Pages
+  gh repo create NOMBRE_PROYECTO --public --clone
+  cd NOMBRE_PROYECTO
+  gh repo view --web   ← activa GitHub Pages desde Settings > Pages > rama main / root
+
+FASE 4 — Crear los archivos web (index, mental, muestrario)
+  Crea index.html: dashboard dark (#060a10) con tarjetas para los 3 agentes (morado/verde/amarillo),
+    reloj en vivo con JS, feed de actividad, links de navegación.
+  Crea mental.html: página con los pasos del proyecto y sección de diagrama (assets/diagrama-mental.png).
+  Crea muestrario.html: feed dinámico que lee muestrario.json con fetch(), renderiza texto/imagen/video.
+  Crea muestrario.json: [ ]   ← array vacío
+  git add . && git commit -m "feat: web inicial" && git push origin main
+
+FASE 5 — Bots Node.js Discord (discord.js v14)
+  Crea discord-bot/ con: package.json, .env, .env.example y 3 archivos de bot.
+  package.json debe tener: discord.js ^14, dotenv, node-fetch como dependencias.
+  .env debe tener:
+    AGENTE_PRINCIPAL_TOKEN=
+    AGENTE_GPT_TOKEN=
+    AGENTE_PUENTE_TOKEN=
+    GITHUB_PAT=           ← obtener con: gh auth token  (scope repo)
+    GITHUB_OWNER=GITHUB_USER
+    GITHUB_REPO=NOMBRE_PROYECTO
+  Bot AGENTE_PRINCIPAL (archivo principal): responde !ping y ejecuta el comando
+    !muestrario [texto|imagen|video] [contenido]  →  dispara repository_dispatch a GitHub Actions.
+    El dispatch debe enviar: { event_type:"muestrario", client_payload:{ tipo, contenido, autor, ts } }
+  Bots AGENTE_GPT y AGENTE_PUENTE: solo responden !ping y mencionas.
+  Agrega el GITHUB_PAT ejecutando: gh auth token  y copiando el resultado en .env
+
+FASE 6 — GitHub Actions workflow
+  Crea .github/workflows/muestrario.yml:
+    - trigger: repository_dispatch con types:[muestrario]
+    - job: checkout → python script que lee muestrario.json, append del payload, keep last 100 → write
+    - commit con github-actions[bot] → git pull --rebase origin main → git push
+    - permissions: contents: write
+
+FASE 7 — Documentación: PPT + diagrama de arquitectura
+  Instala pptxgenjs: cd docs && npm init -y && npm install pptxgenjs
+  Crea docs/gen_pptx.js con pptxgenjs: 5 slides dark/neon:
+    1. Portada con nombre del proyecto y los 3 agentes
+    2. Objetivo: qué construye y para qué
+    3. Arquitectura: 3 columnas de agentes + Discord + GitHub Pages
+    4. Fases: lista numerada 0-10
+    5. Cómo extender: 4 pasos para agregar un agente nuevo
+  Ejecuta: node docs/gen_pptx.js  → genera docs/NombreProyecto.pptx
+  Pide al AGENTE_GPT (en ChatGPT Desktop/web) que genere una imagen de diagrama de arquitectura:
+    "Genera una imagen dark/neon del diagrama de arquitectura: 3 nodos (AGENTE_PRINCIPAL morado,
+     AGENTE_GPT verde, AGENTE_PUENTE amarillo) conectados a Discord central → GitHub Pages."
+  Descarga la imagen y guárdala en assets/diagrama-mental.png
+
+FASE 8 — Script de inicio + README + runbook
+  Crea start_all.ps1 (Windows) o start_all.sh (Mac/Linux) que lanza los 3 bots en paralelo.
+  Actualiza README.md: tabla de agentes, estructura del repo, comandos Discord, variables .env.
+  Crea docs/runbook.md: URLs del proyecto, cómo rotar secretos, troubleshooting.
+
+FASE 9 — Pruebas E2E
+  Levanta los 3 bots: .\start_all.ps1  (o el script equivalente)
+  Verifica GITHUB_PAT con: gh auth token (debe tener scope repo)
+  Envía 3 repository_dispatch de prueba (texto, imagen, video) verificando que cada uno:
+    a) Dispara el GitHub Action correctamente
+    b) Actualiza muestrario.json en el repo
+    c) Se refleja en muestrario.html en la web pública
+  Si hay race conditions en los Actions, añade "git pull --rebase origin main" antes de git push.
+
+FASE 10 — Cierre y entrega
+  git add . && git commit -m "feat: entrega final NOMBRE_PROYECTO" && git push origin main
+  Entrega estas URLs:
+    - Web principal:  https://GITHUB_USER.github.io/NOMBRE_PROYECTO/
+    - Muestrario:     https://GITHUB_USER.github.io/NOMBRE_PROYECTO/muestrario.html
+    - Diseño Mental:  https://GITHUB_USER.github.io/NOMBRE_PROYECTO/mental.html
+    - Repositorio:    https://github.com/GITHUB_USER/NOMBRE_PROYECTO
+    - Discord:        DISCORD_SERVER
+
+═══════════════════════════════════════════
+REGLAS PARA CLAUDE AL EJECUTAR
+═══════════════════════════════════════════
+- Usa el computador (Chrome MCP + computer-use) para tareas en el navegador.
+- Usa PowerShell/Bash para comandos de terminal.
+- Confirma con el usuario solo antes de acciones destructivas o pagos.
+- Si un token o PAT falta, obtén el del gh CLI con: gh auth token
+- Si hay errores de push rechazado, haz git pull --rebase antes de reintentar.
+- Después de cada fase completada, confirma con "✅ FASE N completada" y continúa sin pausar.
+- Al terminar todo, muestra la tabla de URLs finales y di "🚀 Red de Agentes desplegada".</pre>
+    </div>
+  </div>
+
+  <script>
+    function copyPrompt() {
+      const text = document.getElementById('promptText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✓ Copiado';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+  </script>
 </main>
 <footer>MissionControl · Red de Agentes de Ignacio · nitenacho · 2026</footer>
 </body>
