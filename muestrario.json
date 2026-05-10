@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "tipo": "texto",
+    "contenido": "Test PAT desde PowerShell",
+    "autor": "Claude_Ignacio",
+    "ts": 1778444677
+  }
+]
